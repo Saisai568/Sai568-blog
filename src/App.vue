@@ -30,7 +30,10 @@ const handleLogout = () => {
 <template>
   <div class="app">
     <nav class="navbar">
-      <router-link to="/" class="logo">我的技術部落格</router-link>
+      <div class="nav-left">
+        <img src="/avatar.png" alt="個人頭像" class="avatar" />
+        <router-link to="/" class="logo">我的技術部落格</router-link>
+      </div>
       <div class="nav-links">
         <router-link to="/">首頁</router-link>
         <router-link to="/blog">文章列表</router-link>
@@ -87,6 +90,20 @@ body {
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-color);
 }
 
 .logo {
