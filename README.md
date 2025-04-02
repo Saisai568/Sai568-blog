@@ -1,4 +1,4 @@
-# SAI568 部落格
+# Sai568 部落格
 
 這是一個使用 Vue 3 + Vite 開發的現代化部落格系統，具有前後端分離架構。
 
@@ -23,17 +23,20 @@
 ## 安裝說明
 
 1. 克隆專案
+
 ```bash
 git clone https://github.com/yourusername/sai568-blog.git
 cd sai568-blog
 ```
 
 2. 安裝依賴
+
 ```bash
 npm install
 ```
 
 3. 配置環境變數
+
 複製 `.env.example` 文件為 `.env`，並根據需要修改配置。
 
 ## 開發環境運行
@@ -64,7 +67,7 @@ npm run deploy
 
 ## 專案結構
 
-```
+```bash
 sai568-blog/
 ├── src/                # 源代碼目錄
 │   ├── components/     # Vue 組件
