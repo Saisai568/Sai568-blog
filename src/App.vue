@@ -32,7 +32,7 @@ const handleLogout = () => {
     <nav class="navbar">
       <div class="nav-left">
         <img src="/avatar.png" alt="個人頭像" class="avatar" />
-        <router-link to="/" class="logo">我的技術部落格</router-link>
+        <router-link to="/" class="logo">Saisai568's Tech</router-link>
       </div>
       <div class="nav-links">
         <router-link to="/">首頁</router-link>
@@ -50,7 +50,7 @@ const handleLogout = () => {
     </main>
 
     <footer>
-      <p>&copy; {{ new Date().getFullYear() }} 我的技術部落格. All rights reserved.</p>
+      <p>&copy; {{ new Date().getFullYear() }} Saisai568. All rights reserved.</p>
     </footer>
   </div>
 </template>
