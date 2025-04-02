@@ -46,10 +46,16 @@ export const useBlogStore = defineStore('blog', {
     async createPost(post) {
       this.loading = true
       try {
+        const token = localStorage.getItem('token')
+        if (!token) {
+          throw new Error('未登入')
+        }
+
         const response = await fetch(`${API_BASE_URL}/api/posts`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify(post)
         })

@@ -12,12 +12,15 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "concurrently": "^8.2.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "gh-pages": "^6.0.0",
+    "jsonwebtoken": "^9.0.2",
     "pinia": "^2.0.33",
+    "sqlite": "^5.1.1",
     "sqlite3": "^5.1.6",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"

@@ -19,13 +19,30 @@ const routes = [
   {
     path: '/create',
     name: 'CreatePost',
-    component: () => import('../views/CreatePost.vue')
+    component: () => import('../views/CreatePost.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/auth',
+    name: 'Auth',
+    component: () => import('../components/Auth.vue')
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+// 導航守衛
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token')
+  
+  if (to.meta.requiresAuth && !token) {
+    next('/auth')
+  } else {
+    next()
+  }
 })
 
 export default router 

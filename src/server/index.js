@@ -5,6 +5,8 @@ import { fileURLToPath } from 'url'
 import { dirname } from 'path'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import authRoutes from './routes/auth.js'
+import { auth } from './middleware/auth.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -20,6 +22,12 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }))
+
+// 解析 JSON 請求體
+app.use(express.json())
+
+// 認證路由
+app.use('/api/auth', authRoutes)
 
 // 資料庫連接
 const db = new sqlite3.Database(path.join(__dirname, 'blog.db'))
@@ -48,7 +56,7 @@ db.serialize(() => {
         },
         {
           title: '使用 Vite 建立現代化前端專案',
-          content: 'Vite 是一個現代化的前端建構工具，它提供了極快的開發體驗。\n\n## Vite 的優點\n\n1. 快速的冷啟動\n2. 即時的模組熱更新\n3. 真正的按需加載\n\n讓我們來看看如何使用 Vite 建立一個新的專案。'
+          content: 'Vite 是一個現代化的前端建構工具，它提供了極快的開發體驗。\n\n## Vite 的優點\n\n1. 快速的冷啟動\n2. 即時的模組熱更新\n3. 真正的按需加載\n\n讓我們來看看如何使用 Vite 建立一個新專案。'
         },
         {
           title: 'Pinia 狀態管理指南',
@@ -66,9 +74,7 @@ db.serialize(() => {
   })
 })
 
-app.use(express.json())
-
-// API 路由
+// 獲取所有文章
 app.get('/api/posts', (req, res) => {
   db.all('SELECT * FROM posts ORDER BY created_at DESC', [], (err, rows) => {
     if (err) {
@@ -79,6 +85,7 @@ app.get('/api/posts', (req, res) => {
   })
 })
 
+// 獲取單篇文章
 app.get('/api/posts/:id', (req, res) => {
   db.get('SELECT * FROM posts WHERE id = ?', [req.params.id], (err, row) => {
     if (err) {
@@ -86,39 +93,69 @@ app.get('/api/posts/:id', (req, res) => {
       return
     }
     if (!row) {
-      res.status(404).json({ error: '文章不存在' })
+      res.status(404).json({ message: '找不到該文章' })
       return
     }
     res.json(row)
   })
 })
 
-// 創建新文章
-app.post('/api/posts', (req, res) => {
+// 創建新文章（需要認證）
+app.post('/api/posts', auth, (req, res) => {
   const { title, content } = req.body
-  
   if (!title || !content) {
-    res.status(400).json({ error: '標題和內容都是必填的' })
+    res.status(400).json({ message: '標題和內容都是必填的' })
     return
   }
 
-  const stmt = db.prepare('INSERT INTO posts (title, content) VALUES (?, ?)')
-  stmt.run(title, content, function(err) {
+  db.run('INSERT INTO posts (title, content) VALUES (?, ?)', [title, content], function(err) {
     if (err) {
       res.status(500).json({ error: err.message })
       return
     }
-    
-    // 獲取新創建的文章
-    db.get('SELECT * FROM posts WHERE id = ?', [this.lastID], (err, row) => {
-      if (err) {
-        res.status(500).json({ error: err.message })
-        return
-      }
-      res.status(201).json(row)
+    res.status(201).json({
+      id: this.lastID,
+      title,
+      content,
+      created_at: new Date().toISOString()
     })
   })
-  stmt.finalize()
+})
+
+// 更新文章（需要認證）
+app.put('/api/posts/:id', auth, (req, res) => {
+  const { title, content } = req.body
+  if (!title || !content) {
+    res.status(400).json({ message: '標題和內容都是必填的' })
+    return
+  }
+
+  db.run('UPDATE posts SET title = ?, content = ? WHERE id = ?', [title, content, req.params.id], function(err) {
+    if (err) {
+      res.status(500).json({ error: err.message })
+      return
+    }
+    if (this.changes === 0) {
+      res.status(404).json({ message: '找不到該文章' })
+      return
+    }
+    res.json({ message: '文章更新成功' })
+  })
+})
+
+// 刪除文章（需要認證）
+app.delete('/api/posts/:id', auth, (req, res) => {
+  db.run('DELETE FROM posts WHERE id = ?', [req.params.id], function(err) {
+    if (err) {
+      res.status(500).json({ error: err.message })
+      return
+    }
+    if (this.changes === 0) {
+      res.status(404).json({ message: '找不到該文章' })
+      return
+    }
+    res.json({ message: '文章刪除成功' })
+  })
 })
 
 app.listen(port, () => {
