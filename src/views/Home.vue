@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <header class="hero">
-      <h1>歡迎來到我的技術部落格</h1>
+      <h1>歡迎來到Sai568的技術部落格</h1>
       <p>分享技術、學習和開發經驗</p>
     </header>
     

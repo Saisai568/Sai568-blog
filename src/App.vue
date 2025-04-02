@@ -1,5 +1,30 @@
 <script setup>
+import { ref, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+
+const router = useRouter()
+const route = useRoute()
+const isAuthenticated = ref(false)
+
+onMounted(() => {
+  checkAuth()
+})
+
+// 監聽路由變化
+watch(route, () => {
+  checkAuth()
+})
+
+const checkAuth = () => {
+  isAuthenticated.value = !!localStorage.getItem('token')
+}
+
+const handleLogout = () => {
+  localStorage.removeItem('token')
+  isAuthenticated.value = false
+  router.push('/auth')
+}
 </script>
 
 <template>
@@ -9,7 +34,11 @@ import HelloWorld from './components/HelloWorld.vue'
       <div class="nav-links">
         <router-link to="/">首頁</router-link>
         <router-link to="/blog">文章列表</router-link>
-        <router-link to="/create" class="create-btn">寫文章</router-link>
+        <template v-if="isAuthenticated">
+          <router-link to="/create" class="create-btn">寫文章</router-link>
+          <button @click="handleLogout" class="logout-btn">登出</button>
+        </template>
+        <router-link v-else to="/auth" class="login-btn">登入</router-link>
       </div>
     </nav>
 
@@ -52,12 +81,12 @@ body {
 }
 
 .navbar {
-  background: white;
+  background-color: white;
   padding: 1rem 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
@@ -69,7 +98,7 @@ body {
 
 .nav-links {
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
   align-items: center;
 }
 
@@ -84,33 +113,40 @@ body {
   color: var(--primary-color);
 }
 
-.nav-links a.router-link-active {
-  color: var(--primary-color);
-}
-
-.create-btn {
-  background: var(--primary-color);
+.create-btn, .login-btn {
+  background-color: var(--primary-color);
   color: white !important;
   padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  transition: background-color 0.2s !important;
+  border-radius: 4px;
 }
 
-.create-btn:hover {
-  background: var(--secondary-color);
-  color: white !important;
+.logout-btn {
+  background-color: #e53e3e;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: #c53030;
 }
 
 main {
   flex: 1;
-  padding: 2rem 0;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 footer {
-  background: white;
-  padding: 2rem;
+  background-color: white;
+  padding: 1rem;
   text-align: center;
-  color: #718096;
   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 </style>
