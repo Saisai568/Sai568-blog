@@ -54,33 +54,33 @@ onMounted(() => {
 }
 
 .post {
-  background: white;
+  background: var(--card-bg);
   padding: 2rem;
   margin-bottom: 2rem;
   border-radius: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 .post h2 {
   margin: 0 0 0.5rem 0;
-  color: #2d3748;
+  color: var(--text-color);
 }
 
 .date {
-  color: #718096;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
 
 .excerpt {
-  color: #4a5568;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 1rem;
 }
 
 .read-more {
   display: inline-block;
-  color: #667eea;
+  color: var(--primary-color);
   text-decoration: none;
   font-weight: 500;
 }
