@@ -20,6 +20,7 @@ const renderMarkdown = (content) => {
 <style scoped>
 .markdown-content {
   line-height: 1.8;
+  color: var(--text-color);
 }
 
 .markdown-content :deep(h1) {
@@ -42,18 +43,20 @@ const renderMarkdown = (content) => {
 
 .markdown-content :deep(p) {
   margin-bottom: 1em;
+  color: var(--text-color);
 }
 
 .markdown-content :deep(code) {
-  background-color: #f3f4f6;
+  background-color: var(--card-bg);
   padding: 0.2em 0.4em;
   border-radius: 3px;
   font-family: 'Courier New', Courier, monospace;
+  color: var(--text-color);
 }
 
 .markdown-content :deep(pre) {
-  background-color: #1a1a1a;
-  color: #ffffff;
+  background-color: var(--card-bg);
+  color: var(--text-color);
   padding: 1em;
   border-radius: 4px;
   overflow-x: auto;
@@ -70,16 +73,18 @@ const renderMarkdown = (content) => {
   border-left: 4px solid var(--primary-color);
   padding-left: 1em;
   margin: 1em 0;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .markdown-content :deep(ul), .markdown-content :deep(ol) {
   margin: 1em 0;
   padding-left: 2em;
+  color: var(--text-color);
 }
 
 .markdown-content :deep(li) {
   margin-bottom: 0.5em;
+  color: var(--text-color);
 }
 
 .markdown-content :deep(a) {

@@ -38,7 +38,7 @@ onMounted(() => {
 
 <style scoped>
 .blog-list {
-  max-width: 800px;
+  max-width: 80%;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -80,12 +80,21 @@ onMounted(() => {
 
 .read-more {
   display: inline-block;
-  color: var(--primary-color);
+  color: white;
   text-decoration: none;
   font-weight: 500;
+  background-color: var(--primary-color);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  width: 60%;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .read-more:hover {
-  text-decoration: underline;
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 </style> 

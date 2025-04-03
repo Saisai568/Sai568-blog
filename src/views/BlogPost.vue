@@ -11,25 +11,21 @@
     <article v-else-if="post" class="post">
       <h1>{{ post.title }}</h1>
       <p class="date">{{ new Date(post.created_at).toLocaleDateString() }}</p>
-      <div class="content" v-html="formattedContent"></div>
+      <MarkdownViewer :content="post.content" />
     </article>
   </div>
 </template>
 
 <script setup>
-import { onMounted, computed } from 'vue'
+import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useBlogStore } from '../stores/blog'
 import { storeToRefs } from 'pinia'
+import MarkdownViewer from '../components/MarkdownViewer.vue'
 
 const route = useRoute()
 const blogStore = useBlogStore()
 const { currentPost: post, loading, error } = storeToRefs(blogStore)
-
-const formattedContent = computed(() => {
-  if (!post.value?.content) return ''
-  return post.value.content.replace(/\n/g, '<br>')
-})
 
 onMounted(() => {
   blogStore.fetchPost(route.params.id)
@@ -70,28 +66,5 @@ onMounted(() => {
   color: #718096;
   font-size: 0.9rem;
   margin-bottom: 2rem;
-}
-
-.content {
-  color: #4a5568;
-  line-height: 1.8;
-  font-size: 1.1rem;
-}
-
-.content :deep(p) {
-  margin-bottom: 1.5rem;
-}
-
-.content :deep(h2) {
-  color: #2d3748;
-  margin: 2rem 0 1rem 0;
-  font-size: 1.8rem;
-}
-
-.content :deep(code) {
-  background: #f7fafc;
-  padding: 0.2rem 0.4rem;
-  border-radius: 0.25rem;
-  font-family: monospace;
 }
 </style> 
